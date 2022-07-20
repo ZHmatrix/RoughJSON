@@ -19,15 +19,39 @@ namespace rough
         Object
     };
 
+    // return status when parse
+    enum class ParseStatus
+    {
+        OK,
+        ExpectValue,
+        InvalidValue,
+        RootNotSingular
+    };
 
     struct RoughNode
     {
         RoughType type;
     };
 
-    int rough_parse(RoughNode *v, const string &json)
+    class Parser
     {
-    }
+    private:
+        string json;
+        // current parse position
+        int cur;
+        RoughNode *root;
+
+        void parse_whitespace();
+        ParseStatus parse_null(RoughNode *node);
+        ParseStatus parse_true(RoughNode *node);
+        ParseStatus parse_false(RoughNode *node);
+        ParseStatus parse_value(RoughNode *node);
+
+    public:
+        Parser(const string &s) : json(s), cur(0), root(nullptr) {}
+        ~Parser() {}
+        ParseStatus parse();
+        };
 
 }
 
